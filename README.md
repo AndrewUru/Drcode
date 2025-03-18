@@ -1,6 +1,6 @@
 # Neuro Lead
 
-## Overview
+## Overviews
 
 This project is an **AI-Powered Lead Management System** that scores, nurtures, and converts leads for you—automatically. It fetches data from n8n using custom workflows and scratch integrations, seamlessly connecting your lead generation efforts with a robust machine learning pipeline.
 

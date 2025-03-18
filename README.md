@@ -70,6 +70,6 @@ Before running the application, ensure you have the following installed:
 
 ![4](https://github.com/user-attachments/assets/85340024-4c63-4f98-bfc6-bec3b9ad863f)
 
-### Scoring
+### Scoring Page
 
 ![7](https://github.com/user-attachments/assets/b54a6720-4d77-4dda-add8-1e259d57bd86)

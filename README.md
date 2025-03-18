@@ -51,12 +51,21 @@ Before running the application, ensure you have the following installed:
     cd backend
     npm run dev
     ```
+
 ## Website Screenshots
+
 ### Home Page
-!![1](https://github.com/user-attachments/assets/df919a94-a910-4e3e-8fea-bed569737cf3)
+
+![1](https://github.com/user-attachments/assets/df919a94-a910-4e3e-8fea-bed569737cf3)
+
 ### Signin/Login Page
-!![2](https://github.com/user-attachments/assets/1241469f-05d6-49de-b929-ae923d9e7bac)
+
+![2](https://github.com/user-attachments/assets/1241469f-05d6-49de-b929-ae923d9e7bac)
+
 ### How it Works
+
 ![3](https://github.com/user-attachments/assets/640c267e-9fa9-4c73-88d5-d40f0092a816)
-### Others
-!![4](https://github.com/user-attachments/assets/85340024-4c63-4f98-bfc6-bec3b9ad863f)
+
+### Other
+
+![4](https://github.com/user-attachments/assets/85340024-4c63-4f98-bfc6-bec3b9ad863f)

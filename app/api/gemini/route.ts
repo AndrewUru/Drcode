@@ -1,26 +1,25 @@
 // app/api/gemini/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { NextRequest, NextResponse } from "next/server";
+import OpenAI from "openai";
 
-// Initialize the Google Generative AI client
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+// Inicializa el cliente de OpenAI con la API key
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY, // asegúrate de tener esta variable en .env.local
+});
 
 export async function POST(req: NextRequest) {
   try {
-    // Parse the request body
     const { description, category, subcategory } = await req.json();
-    
-    // Validate input
+
     if (!description || !category) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    // Create a prompt for the Gemini model, including subcategory if available
-    const subcategoryText = subcategory ? ` (subcategory: ${subcategory})` : '';
-    
+    const subcategoryText = subcategory ? ` (subcategory: ${subcategory})` : "";
+
     const prompt = `
       Analyze the following lead description for a ${category}${subcategoryText} business:
       "${description}"
@@ -40,56 +39,56 @@ export async function POST(req: NextRequest) {
       }
     `;
 
-    // Use the latest model name format - either gemini-1.5-pro or gemini-1.0-pro
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
-    
-    // Configure structured output
-    const generationConfig = {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
       temperature: 0.7,
-      topP: 0.8,
-      topK: 40,
-    };
-
-    // Call the Gemini API
-    const result = await model.generateContent({
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
-      generationConfig,
     });
-    
-    const response = result.response;
-    const text = response.text();
-    
-    // Extract the JSON response
-    let jsonResponse;
+
+    console.log("OpenAI response:", JSON.stringify(completion, null, 2));
+
+    const text = completion.choices[0]?.message?.content || "";
+
+    // Removed unused variable 'jsonResponse'
     try {
-      // Find JSON in the response (it might be wrapped in markdown code blocks)
-      const jsonMatch = text.match(/```json\s*({[\s\S]*?})\s*```/) || 
-                        text.match(/({[\s\S]*"analysis"[\s\S]*})/);
-      
+      const jsonMatch =
+        text.match(/```json\s*({[\s\S]*?})\s*```/) ||
+        text.match(/({[\s\S]*"analysis"[\s\S]*})/);
       if (jsonMatch && jsonMatch[1]) {
-        jsonResponse = JSON.parse(jsonMatch[1]);
+        JSON.parse(jsonMatch[1]);
       } else {
-        jsonResponse = JSON.parse(text);
+        JSON.parse(text);
       }
-    } catch (error) {
-      console.error('Failed to parse Gemini response:', text);
-      console.log(error);
-      
-      // Fallback: Create a structured response from the text
-      jsonResponse = {
+    } catch {
+      console.error("JSON parse fallback:", text);
+      return NextResponse.json({
         score: 5,
         sentiment: "neutral",
         categoryMatch: 50,
-        analysis: text.substring(0, 500) + (text.length > 500 ? "..." : "")
-      };
+        analysis: text.substring(0, 500) + (text.length > 500 ? "..." : ""),
+      });
     }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Error processing request:", error.message);
+    } else {
+      console.error("Error processing request:", error);
+    }
+    console.error("Error processing request:", error);
 
-    // Return the analysis results
-    return NextResponse.json(jsonResponse);
-  } catch (error) {
-    console.error('Error processing request:', error);
     return NextResponse.json(
-      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
+      {
+        error: "Internal server error",
+        details: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : null,
+        openaiError:
+          (error as { response?: { data?: unknown } })?.response?.data || null,
+      },
       { status: 500 }
     );
   }

@@ -98,7 +98,7 @@ const HeroSection = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        Supercharge Your Sales Funnel with Smart AI
+        Potencie su embudo de ventas con IA inteligente
       </motion.h1>
       <motion.p
         className="text-xl mb-8 max-w-2xl"
@@ -106,8 +106,9 @@ const HeroSection = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
       >
-        AI-Powered Lead Management System that scores, nurtures, and converts
-        leads for you—automatically.
+        Sistema de gestión de clientes potenciales impulsado por IA que
+        califica, nutre y convierte clientes potenciales para usted,
+        automáticamente.
       </motion.p>
       <motion.div
         className="flex flex-col sm:flex-row gap-4"
@@ -120,12 +121,12 @@ const HeroSection = () => {
             size="lg"
             className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white"
           >
-            Get Started Free
+            Empieza gratis
           </Button>
         </Link>
         <Link href={"/test"}>
           <Button size="lg" variant="outline">
-            Book a Demo
+            Reserva una demo
           </Button>
         </Link>
       </motion.div>
